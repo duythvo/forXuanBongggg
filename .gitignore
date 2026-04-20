@@ -1,0 +1,45 @@
+# Node modules
+node_modules/
+
+# Build output
+dist/
+build/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE/editor
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# Env files
+.env
+.env.*
+
+# Misc
+*.local
+*.log
+*.cache
+*.tmp
+
+# Optional: ignore coverage and test output
+coverage/
+*.lcov
+
+# Optional: ignore Mac system files
+.AppleDouble
+.LSOverride
+
+# Optional: ignore Windows system files
+Desktop.ini
+$RECYCLE.BIN/

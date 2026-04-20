@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --deep: #050210;
+  --nebula1: #1a0845;
+  --nebula2: #0d1f4a;
+  --violet: #9b72cf;
+  --gold: #f4c97a;
+  --rose: #e8a4c0;
+  --white: #f5f0ff;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body, #root {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--deep);
+  cursor: none;
+}
+
+body {
+  font-family: 'Be Vietnam Pro', sans-serif;
+  color: var(--white);
+}
+
+@media (max-width: 768px) {
+  html, body {
+    cursor: auto;
+  }
+}
+
+/* Scrollbar hidden */
+::-webkit-scrollbar { display: none; }
+
+.font-display {
+  font-family: 'Playfair Display', serif;
+}
+.font-body {
+  font-family: 'Be Vietnam Pro', sans-serif;
+}
+.font-lora {
+  font-family: 'Lora', serif;
+}
