@@ -3,6 +3,7 @@ import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import useStore from "../../store/useStore";
 import { CONFIG } from "../../config/messages";
+import { getMobilePosition } from "../../utils/mobileCoords";
 
 export default function ConstellationLines() {
   const lineRef = useRef();
@@ -21,12 +22,7 @@ export default function ConstellationLines() {
     // Get star positions from CONFIG
     const starMap = {};
     CONFIG.stars.forEach((star) => {
-      if (isMobile) {
-        const [x, y, z] = star.position;
-        starMap[star.id] = [x * 0.68, y * 0.68, z];
-      } else {
-        starMap[star.id] = star.position;
-      }
+      starMap[star.id] = isMobile ? getMobilePosition(star.position) : star.position;
     });
 
     // Draw lines between consecutive clicked stars

@@ -49,17 +49,19 @@ function ShootingStar() {
         s.active = true
         s.opacity = 1
         
+        const isMobile = window.innerWidth <= 768;
         // Randomize start pos on right/top side
         const isRightStart = Math.random() > 0.3
         
         if (isRightStart) {
-            s.x = Math.random() * 10 + 10 // Start further right
+            // Giảm toạ độ X trên mobile để sao băng bắt đầu ngay mép màn hình chứ không bị tít ngoài xa
+            s.x = Math.random() * (isMobile ? 5 : 10) + (isMobile ? 4 : 10) 
             s.y = Math.random() * 10 + 2
             s.angle = -(Math.random() * 0.4 + 0.1) * Math.PI // Moving left and down roughly (-18deg to -72deg)
             if (s.angle < -Math.PI) s.angle += Math.PI * 2
             s.angle = Math.PI + s.angle
         } else {
-            s.x = (Math.random() - 0.5) * 20
+            s.x = (Math.random() - 0.5) * (isMobile ? 8 : 20)
             s.y = 10 + Math.random() * 5
             s.angle = -Math.PI / 2 - (Math.random() - 0.5) * 0.8
         }

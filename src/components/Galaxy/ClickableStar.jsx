@@ -4,6 +4,7 @@ import { Html } from "@react-three/drei";
 import { gsap } from "gsap";
 import * as THREE from "three";
 import useStore from "../../store/useStore";
+import { getMobilePosition } from "../../utils/mobileCoords";
 
 export default function ClickableStar({ star }) {
   const isMobile = typeof window !== "undefined" && window.innerWidth <= 768;
@@ -11,10 +12,7 @@ export default function ClickableStar({ star }) {
   // Scale nhẹ để ngôi sao vừa màn hình nhỏ
   let position = star.position;
   if (isMobile) {
-    const [x, y, z] = star.position;
-    const scaleX = 0.68;
-    const scaleY = 0.68;
-    position = [x * scaleX, y * scaleY, z];
+    position = getMobilePosition(star.position);
   }
   const meshRef = useRef();
   const glowRef = useRef();
@@ -141,7 +139,7 @@ export default function ClickableStar({ star }) {
       </mesh>
 
       {/* Core star */}
-      <mesh ref={meshRef}>
+      <mesh ref={meshRef} scale={isMobile ? [1.4, 1.4, 1.4] : [1, 1, 1]}>
         <sphereGeometry args={[0.09, 16, 16]} />
         <meshStandardMaterial
           color={isHighlighted ? "#ffe8b0" : "#d4b8ff"}
@@ -158,7 +156,7 @@ export default function ClickableStar({ star }) {
         onPointerOut={handlePointerOut}
         onPointerDown={handleClick}
       >
-        <sphereGeometry args={[isMobile ? 0.32 : 0.135, 16, 16]} />
+        <sphereGeometry args={[isMobile ? 0.45 : 0.135, 16, 16]} />
         <meshBasicMaterial transparent opacity={0} depthWrite={false} />
       </mesh>
 

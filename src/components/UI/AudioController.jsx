@@ -25,6 +25,12 @@ export function initAudio() {
     volume: 0,
     autoplay: false,
   });
+
+  // Explicitly unlock AudioContext on iOS by playing silently during initial click handling
+  ambient.play();
+  ambient.pause();
+  birthday.play();
+  birthday.pause();
 }
 
 export function playAmbient() {
@@ -118,7 +124,7 @@ export default function AudioController() {
   // Only play music in final scene.
   useEffect(() => {
     if (currentScene === 3 && !isMuted) {
-      playBirthday();
+      playBirthday(); // Chơi nhạc khi bắt đầu màn cuối
     } else {
       stopBirthday();
       stopAmbient();
