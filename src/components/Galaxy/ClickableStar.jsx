@@ -7,15 +7,14 @@ import useStore from "../../store/useStore";
 
 export default function ClickableStar({ star }) {
   const isMobile = typeof window !== "undefined" && window.innerWidth <= 768;
-  // Scale X mạnh hơn Y để tránh chồng, thêm offset nhỏ theo id
+  // Trên mobile: không dịch chuyển tọa độ ngôi sao, để camera/FOV xử lý
+  // Scale nhẹ để ngôi sao vừa màn hình nhỏ
   let position = star.position;
   if (isMobile) {
     const [x, y, z] = star.position;
-    // Scale X nhiều hơn Y, dịch Y nhẹ theo id để tách các sao
-    const scaleX = 0.62;
-    const scaleY = 0.74;
-    const offsetY = (star.id - 3) * 0.6; // tăng offset nhiều hơn nữa để chắc chắn không chồng
-    position = [x * scaleX, y * scaleY + offsetY, z];
+    const scaleX = 0.68;
+    const scaleY = 0.68;
+    position = [x * scaleX, y * scaleY, z];
   }
   const meshRef = useRef();
   const glowRef = useRef();
@@ -153,13 +152,13 @@ export default function ClickableStar({ star }) {
         />
       </mesh>
 
-      {/* Invisible hit area: 1.5x larger click/hover target for better UX */}
+      {/* Invisible hit area: larger on mobile for touch UX */}
       <mesh
         onPointerOver={handlePointerOver}
         onPointerOut={handlePointerOut}
-        onClick={handleClick}
+        onPointerDown={handleClick}
       >
-        <sphereGeometry args={[0.135, 16, 16]} />
+        <sphereGeometry args={[isMobile ? 0.32 : 0.135, 16, 16]} />
         <meshBasicMaterial transparent opacity={0} depthWrite={false} />
       </mesh>
 

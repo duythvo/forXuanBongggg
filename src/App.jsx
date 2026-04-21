@@ -11,6 +11,7 @@ import useStore from "./store/useStore";
 
 function SceneHUD() {
   const currentScene = useStore((s) => s.currentScene);
+  const isMobile = typeof window !== "undefined" && window.innerWidth <= 768;
 
   if (currentScene !== 1) return null;
 
@@ -22,20 +23,21 @@ function SceneHUD() {
       transition={{ duration: 1 }}
       style={{
         position: "fixed",
-        bottom: 40,
+        bottom: isMobile ? 80 : 40,
         left: "50%",
         transform: "translateX(-50%)",
         zIndex: 20,
         textAlign: "center",
         pointerEvents: "none",
+        width: isMobile ? "90vw" : "auto",
       }}
     >
       <p
         style={{
           fontFamily: "'Be Vietnam Pro', sans-serif",
           fontWeight: 200,
-          fontSize: "clamp(0.9rem, 2vw, 1.1rem)",
-          letterSpacing: "0.25em",
+          fontSize: isMobile ? "clamp(0.72rem, 3.5vw, 0.9rem)" : "clamp(0.9rem, 2vw, 1.1rem)",
+          letterSpacing: isMobile ? "0.12em" : "0.25em",
           textTransform: "uppercase",
           color: "#f4c97a",
           textShadow: "0 0 20px rgba(244,201,122,0.5)",

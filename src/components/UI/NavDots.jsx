@@ -29,24 +29,108 @@ export default function NavDots() {
   // Touch swipe support
   useEffect(() => {
     let touchStartX = 0;
+    let touchStartY = 0;
     const handleTouchStart = (e) => {
       touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
     };
     const handleTouchEnd = (e) => {
-      const delta = touchStartX - e.changedTouches[0].clientX;
-      if (Math.abs(delta) > 50) {
-        delta > 0
+      const deltaX = touchStartX - e.changedTouches[0].clientX;
+      const deltaY = touchStartY - e.changedTouches[0].clientY;
+      // Only horizontal swipe (ignore vertical scrolling intent)
+      if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
+        deltaX > 0
           ? useStore.getState().nextScene()
           : useStore.getState().prevScene();
       }
     };
-    window.addEventListener("touchstart", handleTouchStart);
-    window.addEventListener("touchend", handleTouchEnd);
+    window.addEventListener("touchstart", handleTouchStart, { passive: true });
+    window.addEventListener("touchend", handleTouchEnd, { passive: true });
     return () => {
       window.removeEventListener("touchstart", handleTouchStart);
       window.removeEventListener("touchend", handleTouchEnd);
     };
   }, []);
+
+  const isMobile = typeof window !== "undefined" && window.innerWidth <= 768;
+
+  if (isMobile) {
+    // Mobile: horizontal dots at bottom center with large touch targets
+    return (
+      <div
+        style={{
+          position: "fixed",
+          bottom: "max(16px, env(safe-area-inset-bottom, 16px))",
+          left: "50%",
+          transform: "translateX(-50%)",
+          display: "flex",
+          flexDirection: "row",
+          gap: 8,
+          zIndex: 50,
+          alignItems: "center",
+          background: "rgba(10,6,20,0.35)",
+          backdropFilter: "blur(12px)",
+          WebkitBackdropFilter: "blur(12px)",
+          border: "1px solid rgba(255,255,255,0.07)",
+          borderRadius: 30,
+          padding: "6px 14px",
+        }}
+      >
+        {SCENES.map(({ label, scene }) => (
+          <button
+            key={scene}
+            onClick={() => setScene(scene)}
+            aria-label={label}
+            style={{
+              minWidth: 44,
+              height: 36,
+              borderRadius: 18,
+              border: "none",
+              background: "transparent",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              cursor: "pointer",
+              padding: "0 6px",
+              gap: 6,
+              transition: "all 0.3s ease",
+            }}
+          >
+            <div
+              style={{
+                width: currentScene === scene ? 8 : 5,
+                height: currentScene === scene ? 8 : 5,
+                borderRadius: "50%",
+                background:
+                  currentScene === scene ? "#f4c97a" : "rgba(255,255,255,0.35)",
+                boxShadow:
+                  currentScene === scene
+                    ? "0 0 8px rgba(244,201,122,0.9), 0 0 20px rgba(244,201,122,0.4)"
+                    : "none",
+                transition: "all 0.3s ease",
+                flexShrink: 0,
+              }}
+            />
+            {currentScene === scene && (
+              <span
+                style={{
+                  fontFamily: "'Be Vietnam Pro', sans-serif",
+                  fontWeight: 300,
+                  fontSize: "0.6rem",
+                  letterSpacing: "0.1em",
+                  textTransform: "uppercase",
+                  color: "rgba(244,201,122,0.8)",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {label}
+              </span>
+            )}
+          </button>
+        ))}
+      </div>
+    );
+  }
 
   return (
     <div

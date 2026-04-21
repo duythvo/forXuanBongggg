@@ -152,9 +152,10 @@ export default function FinalMessage() {
 
   return (
     <div
-      className="absolute inset-0 flex flex-col items-center justify-center text-center px-6"
+      className="absolute inset-0 flex flex-col items-center justify-center text-center"
       style={{
         zIndex: 20,
+        padding: "max(4vh, 1rem) 1.2rem max(8vh, 5rem)",
         background:
           "radial-gradient(ellipse at center, rgba(10,6,20,0.22) 0%, rgba(5,2,12,0.58) 100%)",
       }}
@@ -186,7 +187,7 @@ export default function FinalMessage() {
           textShadow: "0 0 15px rgba(244,201,122,0.4)",
         }}
       >
-        Happy Birthdayyy,
+        Happy Birthdayyy
       </p>
 
       {/* Name */}
@@ -267,16 +268,17 @@ export default function FinalMessage() {
           background: "transparent",
           border: "2px solid rgba(244,201,122,0.6)",
           borderRadius: 40,
-          padding: "14px 40px",
+          padding: "14px 32px",
           color: "#f4c97a",
           fontFamily: "'Be Vietnam Pro', sans-serif",
           fontWeight: 400,
-          fontSize: "clamp(0.9rem, 2vw, 1.05rem)",
-          letterSpacing: "0.22em",
+          fontSize: "clamp(0.82rem, 2vw, 1.05rem)",
+          letterSpacing: "0.18em",
           textTransform: "uppercase",
-          cursor: "none",
+          cursor: "pointer",
           transition: "all 0.4s ease",
           textShadow: "0 0 10px rgba(244,201,122,0.3)",
+          touchAction: "manipulation",
         }}
         onMouseEnter={(e) => {
           gsap.to(e.currentTarget, {

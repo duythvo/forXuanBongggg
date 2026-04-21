@@ -230,3 +230,96 @@ h1 {
         font-size: 1.8rem;
     }
 }
+
+/* =========================================================
+   MOBILE OPTIMIZATIONS
+   ========================================================= */
+
+/* Prevent text size adjustment on orientation change */
+html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+
+/* Allow natural touch behavior, prevent double-tap zoom on buttons */
+button, a {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Safe area support for notched phones */
+@supports (padding: max(0px)) {
+    #ui-layer {
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+    }
+}
+
+@media (max-width: 768px) {
+    /* Body / global */
+    body, html {
+        /* Prevent pull-to-refresh interfering with 3D canvas */
+        overscroll-behavior: none;
+    }
+
+    /* Typography scale down */
+    h1 {
+        font-size: clamp(1.4rem, 6vw, 2.2rem);
+        letter-spacing: 1px;
+    }
+
+    .subtitle {
+        font-size: clamp(0.78rem, 3.5vw, 1rem);
+        letter-spacing: 0.1em;
+    }
+
+    .hint {
+        font-size: clamp(0.8rem, 3.5vw, 1rem);
+    }
+
+    /* HUD */
+    #hud-screen {
+        padding: 20px 14px;
+    }
+
+    /* Glass buttons — bigger tap target */
+    .glass-btn {
+        padding: 14px 24px;
+        font-size: clamp(0.85rem, 3.5vw, 1rem);
+        min-height: 48px;
+    }
+
+    /* Modals — full-width on mobile */
+    .glass-card {
+        max-width: 100%;
+        width: calc(100% - 24px);
+        padding: 24px 18px;
+        border-radius: 16px;
+    }
+
+    .glass-card h2 {
+        font-size: clamp(1.3rem, 5vw, 1.8rem);
+    }
+
+    .glass-card p {
+        font-size: clamp(0.88rem, 3.5vw, 1rem);
+        line-height: 1.7;
+    }
+
+    .close-btn {
+        font-size: 1.6rem;
+        top: 10px;
+        right: 14px;
+        /* Increase touch target */
+        padding: 6px;
+        min-width: 44px;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Prevent accidental zoom on input focus */
+    input, textarea, select {
+        font-size: 16px;
+    }
+}

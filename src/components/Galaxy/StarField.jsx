@@ -51,7 +51,8 @@ export default function StarField({ count = 3000 }) {
     const scales = new Float32Array(count)
     const seeds = new Float32Array(count)
 
-    // Color palette for stars
+    // Vùng ngân hà trung tâm (tạo dải ngân hà sáng vắt ngang)
+    // Tăng mật độ ở giữa và thêm màu sắc rực rỡ
     const starColors = [
       new THREE.Color('#f5f0ff'), // cool white
       new THREE.Color('#c8d8ff'), // blue white
@@ -59,24 +60,46 @@ export default function StarField({ count = 3000 }) {
       new THREE.Color('#e8a4c0'), // soft rose
       new THREE.Color('#9b72cf'), // violet
       new THREE.Color('#ffffff'), // pure white
+      new THREE.Color('#ffd1dc'), // baby pink
+      new THREE.Color('#b3e5fc'), // light blue
+      new THREE.Color('#fff9c4'), // soft yellow
     ]
 
     for (let i = 0; i < count; i++) {
-      // Spherical distribution
-      const r = 15 + Math.random() * 20
-      const theta = Math.random() * Math.PI * 2
-      const phi = Math.acos(2 * Math.random() - 1)
+      // Nhấn mạnh dải thiên hà (Milky Way band) vắt ngang
+      const isBand = Math.random() > 0.6
+      
+      let phi, theta, r;
+      if (isBand) {
+          r = 10 + Math.random() * 25
+          theta = Math.random() * Math.PI * 2
+          // Ép các ngôi sao vào dải trung tâm nhiều hơn
+          phi = Math.PI / 2 + (Math.random() - 0.5) * 0.8
+      } else {
+          r = 15 + Math.random() * 20
+          theta = Math.random() * Math.PI * 2
+          phi = Math.acos(2 * Math.random() - 1)
+      }
 
       positions[i * 3] = r * Math.sin(phi) * Math.cos(theta)
       positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta) * 0.5 // flatten
       positions[i * 3 + 2] = r * Math.cos(phi)
 
       const c = starColors[Math.floor(Math.random() * starColors.length)]
-      colors[i * 3] = c.r
-      colors[i * 3 + 1] = c.g
-      colors[i * 3 + 2] = c.b
+      
+      // Những ngôi sao ở dải trung tâm sẽ sáng và màu rực hơn 1 xíu
+      if (isBand && Math.random() > 0.8) {
+          colors[i * 3] = c.r * 1.2
+          colors[i * 3 + 1] = c.g * 1.2
+          colors[i * 3 + 2] = c.b * 1.2
+      } else {
+          colors[i * 3] = c.r
+          colors[i * 3 + 1] = c.g
+          colors[i * 3 + 2] = c.b
+      }
 
-      scales[i] = 0.3 + Math.random() * 1.2
+      // Kích thước lấp lánh hơn chút
+      scales[i] = 0.5 + Math.random() * 1.8
       seeds[i] = Math.random() * Math.PI * 2
     }
 

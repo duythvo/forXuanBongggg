@@ -16,10 +16,17 @@ export default function ConstellationLines() {
       return { positions: new Float32Array(0), colors: new Float32Array(0) };
     }
 
+    const isMobile = typeof window !== "undefined" && window.innerWidth <= 768;
+
     // Get star positions from CONFIG
     const starMap = {};
     CONFIG.stars.forEach((star) => {
-      starMap[star.id] = star.position;
+      if (isMobile) {
+        const [x, y, z] = star.position;
+        starMap[star.id] = [x * 0.68, y * 0.68, z];
+      } else {
+        starMap[star.id] = star.position;
+      }
     });
 
     // Draw lines between consecutive clicked stars

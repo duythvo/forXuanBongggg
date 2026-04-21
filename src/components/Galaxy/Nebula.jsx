@@ -48,10 +48,19 @@ const nebulaFrag = `
 `
 
 const NEBULA_DATA = [
-  { color: '#1a0845', opacity: 0.07, position: [0, 0, -8], rotation: 0.0003, size: 24 },
-  { color: '#0d1f4a', opacity: 0.06, position: [-5, 3, -10], rotation: -0.0002, size: 20 },
-  { color: '#e8a4c0', opacity: 0.04, position: [6, -2, -12], rotation: 0.0004, size: 18 },
-  { color: '#9b72cf', opacity: 0.05, position: [-3, -4, -9], rotation: -0.0003, size: 16 },
+  // Deeper background layers (Dark blues and purples)
+  { color: '#1a0845', opacity: 0.09, position: [0, 0, -15], rotation: 0.0001, size: 38 },
+  { color: '#0d1f4a', opacity: 0.07, position: [-8, 4, -18], rotation: -0.00015, size: 32 },
+  { color: '#2a1b54', opacity: 0.10, position: [10, 6, -16], rotation: 0.0002, size: 30 },
+  
+  // Mid layers with nice colors (Reduced brightness)
+  { color: '#e8a4c0', opacity: 0.045, position: [6, -3, -12], rotation: 0.0003, size: 26 },
+  { color: '#9b72cf', opacity: 0.06, position: [-4, -5, -10], rotation: -0.00025, size: 24 },
+  { color: '#5b2f8a', opacity: 0.075, position: [2, 2, -11], rotation: 0.00035, size: 28 },
+  
+  // Front hints (Very subtle)
+  { color: '#c8d8ff', opacity: 0.035, position: [-6, 6, -9], rotation: -0.0002, size: 20 },
+  { color: '#ffb3d9', opacity: 0.02, position: [8, -6, -8], rotation: 0.0004, size: 18 },
 ]
 
 function NebulaMesh({ color, opacity, position, rotation: rotSpeed, size }) {

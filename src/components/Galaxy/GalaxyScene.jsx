@@ -7,6 +7,7 @@ import Nebula from "./Nebula";
 import ClickableStar from "./ClickableStar";
 import ConstellationLines from "./ConstellationLines";
 import TaurusConstellation from "./TaurusConstellation";
+import ShootingStars from "./ShootingStars";
 import { CONFIG } from "../../config/messages";
 import AnimatedTaurusConstellation from "./AnimatedTaurusConstellation";
 import { useMouseParallax } from "../../hooks/useMouseParallax";
@@ -25,9 +26,11 @@ function CameraController() {
     setCameraRef(camera);
   }, [camera, setCameraRef]);
 
-  // Scene-based Z targets
+  // Scene-based Z targets - zoom out more on mobile
   useEffect(() => {
-    const zMap = { 0: 14, 1: 8, 2: 8, 3: 14 };
+    const zMapDesktop = { 0: 14, 1: 8, 2: 8, 3: 14 };
+    const zMapMobile = { 0: 16, 1: 11, 2: 11, 3: 16 };
+    const zMap = isMobile ? zMapMobile : zMapDesktop;
     const target = zMap[currentScene] ?? 8;
     baseZ.current = target;
   }, [currentScene]);
@@ -89,7 +92,7 @@ export default function GalaxyScene() {
   return (
     <div className="absolute inset-0" style={{ zIndex: 1 }}>
       <Canvas
-        camera={{ position: [0, 0, 14], fov: 75, near: 0.1, far: 200 }}
+        camera={{ position: [0, 0, isMobile ? 16 : 14], fov: isMobile ? 85 : 75, near: 0.1, far: 200 }}
         gl={{
           antialias: true,
           toneMapping: THREE.ACESFilmicToneMapping,
@@ -108,8 +111,9 @@ export default function GalaxyScene() {
           distance={20}
         />
 
-        <StarField count={isMobile ? 800 : 3000} />
-        <Nebula count={isMobile ? 2 : 4} />
+        <StarField count={isMobile ? 1200 : 4500} />
+        <Nebula count={isMobile ? 4 : 8} />
+        <ShootingStars count={isMobile ? 4 : 8} />
         {!showAnimatedTaurus && (
           <TaurusConstellation isMobile={isMobile} shake={shake} />
         )}

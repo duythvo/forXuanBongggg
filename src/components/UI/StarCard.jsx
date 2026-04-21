@@ -62,9 +62,23 @@ export default function StarCard() {
   const cardPosition = useMemo(() => {
     const vw = window.innerWidth;
     const vh = window.innerHeight;
-    const margin = 14;
-    const cardWidth = Math.min(520, vw - margin * 2);
-    const cardHeight = Math.min(500, vh - margin * 2);
+    const isMobile = vw <= 768;
+
+    if (isMobile) {
+      // Mobile: full-width bottom sheet style
+      return {
+        left: 0,
+        bottom: 0,
+        top: "auto",
+        width: "100%",
+        maxHeight: "60vh",
+        borderRadius: "20px 20px 0 0",
+      };
+    }
+
+    const margin = 20;
+    const cardWidth = Math.min(400, vw - margin * 2); // Reduced from 520
+    const cardHeight = Math.min(420, vh - margin * 2); // Reduced from 500
 
     const fallback = {
       left: Math.max((vw - cardWidth) / 2, margin),
@@ -83,9 +97,7 @@ export default function StarCard() {
     const starX = (projected.x * 0.5 + 0.5) * vw;
     const starY = (-projected.y * 0.5 + 0.5) * vh;
 
-    // Pull the card a bit toward the viewport center so it stays readable,
-    // while still staying anchored near the selected star.
-    const centerBias = 0.3;
+    const centerBias = 0.35; // Pull slightly more to center
     const preferredCenterX = starX + (vw / 2 - starX) * centerBias;
     const preferredCenterY = starY + (vh / 2 - starY) * centerBias;
 
@@ -126,26 +138,28 @@ export default function StarCard() {
     };
   }, []);
 
+  const isMobileDep = typeof window !== "undefined" && window.innerWidth <= 768;
+
   return (
     <AnimatePresence>
       {openCard && (
         <motion.div
           key={openCard.id}
-          initial={{ opacity: 0, scale: 0.8, y: 10 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.9, y: -10 }}
-          transition={{ type: "spring", stiffness: 400, damping: 28 }}
+          initial={isMobileDep ? { opacity: 0, y: 80 } : { opacity: 0, scale: 0.8, y: 10 }}
+          animate={isMobileDep ? { opacity: 1, y: 0 } : { opacity: 1, scale: 1, y: 0 }}
+          exit={isMobileDep ? { opacity: 0, y: 80 } : { opacity: 0, scale: 0.9, y: -10 }}
+          transition={isMobileDep ? { type: "spring", stiffness: 300, damping: 30 } : { type: "spring", stiffness: 400, damping: 28 }}
           style={{
             position: "fixed",
             ...cardPosition,
-            background: "rgba(10, 6, 20, 0.92)",
+            background: "rgba(10, 6, 20, 0.95)",
             border: "1px solid rgba(155,114,207,0.4)",
-            borderRadius: 18,
+            borderRadius: cardPosition.borderRadius ?? 18,
             backdropFilter: "blur(20px)",
             WebkitBackdropFilter: "blur(20px)",
             boxShadow:
               "0 0 60px rgba(155,114,207,0.15), 0 20px 60px rgba(0,0,0,0.6)",
-            padding: "2.6rem 2.5rem 2.8rem",
+            padding: isMobileDep ? "1.6rem 1.4rem 2rem" : "1.8rem 2rem 2.2rem",
             overflowY: "auto",
             zIndex: 100,
           }}
@@ -160,14 +174,14 @@ export default function StarCard() {
               background: "rgba(255,255,255,0.05)",
               border: "1px solid rgba(255,255,255,0.1)",
               borderRadius: "50%",
-              width: 32,
-              height: 32,
+              width: isMobileDep ? 40 : 28,
+              height: isMobileDep ? 40 : 28,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               color: "rgba(255,255,255,0.5)",
-              fontSize: 15,
-              cursor: "none",
+              fontSize: isMobileDep ? 18 : 14,
+              cursor: "pointer",
               transition: "all 0.2s",
             }}
             onMouseEnter={(e) => (e.currentTarget.style.color = "#f4c97a")}
@@ -179,7 +193,7 @@ export default function StarCard() {
           </button>
 
           {/* Emoji */}
-          <div style={{ fontSize: "2.2rem", marginBottom: "1rem" }}>
+          <div style={{ fontSize: isMobileDep ? "1.8rem" : "1.8rem", marginBottom: "0.6rem" }}>
             {openCard.emoji}
           </div>
 
@@ -189,11 +203,12 @@ export default function StarCard() {
               fontFamily: "'Lora', serif",
               fontStyle: "italic",
               fontWeight: 600,
-              fontSize: "1.9rem",
+              fontSize: isMobileDep ? "1.3rem" : "1.45rem",
               color: "#f4c97a",
               textShadow: "0 0 20px rgba(244,201,122,0.3)",
-              marginBottom: "1rem",
+              marginBottom: "0.6rem",
               lineHeight: 1.5,
+              paddingRight: "2rem",
             }}
           >
             {openCard.title}
@@ -204,8 +219,8 @@ export default function StarCard() {
             style={{
               fontFamily: "'Be Vietnam Pro', sans-serif",
               fontWeight: 500,
-              fontSize: "1.22rem",
-              lineHeight: 2,
+              fontSize: isMobileDep ? "0.95rem" : "1.05rem",
+              lineHeight: isMobileDep ? 1.75 : 1.85,
               letterSpacing: "0.008em",
               color: "rgba(245,240,255,0.94)",
             }}
@@ -224,7 +239,7 @@ export default function StarCard() {
               left: 0,
               height: 2,
               width: "100%",
-              borderRadius: "0 0 18px 18px",
+              borderRadius: isMobileDep ? "0" : "0 0 18px 18px",
               background: "linear-gradient(to right, #9b72cf, #f4c97a)",
               transformOrigin: "left",
             }}

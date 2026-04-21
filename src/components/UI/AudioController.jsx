@@ -143,7 +143,7 @@ export default function AudioController() {
       onClick={toggleMute}
       style={{
         position: "fixed",
-        bottom: 24,
+        bottom: "max(24px, env(safe-area-inset-bottom, 24px))",
         right: 24,
         background: "rgba(10,6,20,0.5)",
         border: "1px solid rgba(255,255,255,0.1)",
@@ -154,11 +154,12 @@ export default function AudioController() {
         alignItems: "center",
         justifyContent: "center",
         fontSize: "1.1rem",
-        cursor: "none",
+        cursor: "pointer",
         backdropFilter: "blur(10px)",
         WebkitBackdropFilter: "blur(10px)",
         transition: "all 0.3s",
         zIndex: 50,
+        touchAction: "manipulation",
       }}
       onMouseEnter={(e) =>
         gsap.to(e.currentTarget, {
