@@ -101,12 +101,14 @@ export default function App() {
       {/* Memory card popup */}
       <StarCard />
 
+      {/* Tích hợp Audio Controller: Render DOM Element <audio> từ đầu để không bị lỗi lúc mở khóa âm thanh */}
+      <AudioController />
+
       {/* Persistent UI */}
       {currentScene > 0 && (
         <>
           <NavDots />
           <TaurusBadge />
-          <AudioController />
         </>
       )}
 

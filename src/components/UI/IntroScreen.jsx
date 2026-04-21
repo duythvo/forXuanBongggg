@@ -109,7 +109,7 @@ export default function IntroScreen() {
           WebkitLineClamp: isMobile ? "unset" : 2,
           WebkitBoxOrient: "vertical",
           fontSize: isMobile
-            ? "clamp(1.1rem, 5vw, 1.7rem)"
+            ? "clamp(0.95rem, 4.5vw, 1.35rem)"
             : "clamp(2.1rem, 6vw, 2.9rem)",
         }}
       >
@@ -165,12 +165,12 @@ export default function IntroScreen() {
           background: "transparent",
           border: "2px solid rgba(244,201,122,0.6)",
           borderRadius: 40,
-          padding: "14px 0.5em",
+          padding: isMobile ? "16px 20px" : "14px 0.5em",
           minWidth: 220,
           color: "#f4c97a",
           fontFamily: "'Be Vietnam Pro', sans-serif",
           fontWeight: 400,
-          fontSize: "clamp(1.08rem, 2.8vw, 1.22rem)",
+          fontSize: isMobile ? "1rem" : "clamp(1.08rem, 2.8vw, 1.22rem)",
           letterSpacing: "0.22em",
           textTransform: "uppercase",
           cursor: isMobile ? "pointer" : "none",
