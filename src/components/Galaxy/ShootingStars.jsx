@@ -14,19 +14,35 @@ const fragmentShader = `
   varying vec2 vUv;
   uniform float uOpacity;
   void main() {
-    // vUv.x goes from 0 (left) to 1 (right)
-    // We want the head at right (1.0), tail fading to left (0.0)
-    float tail = smoothstep(0.0, 1.0, vUv.x);
-    // Vertical center glow
-    float glow = smoothstep(0.0, 0.5, vUv.y) * smoothstep(1.0, 0.5, vUv.y);
-    // Head bright peak
-    float head = smoothstep(0.95, 1.0, vUv.x);
+    float x = vUv.x;
+    float y = vUv.y;
     
-    float alpha = (tail * glow + head * 2.0) * uOpacity;
+    float dy = abs(y - 0.5);
     
-    // Core color white, tail slightly blue/purple
-    vec3 color = mix(vec3(0.5, 0.7, 1.0), vec3(1.0, 1.0, 1.0), vUv.x);
+    // Tail dày và mượt hơn, không bị nhọn hoắt
+    float tailCore = smoothstep(0.15, 0.0, dy) * smoothstep(0.0, 0.9, x);
+    float tailGlow = smoothstep(0.4, 0.0, dy) * smoothstep(0.0, 0.9, x) * 0.6;
     
+    // Đầu sao băng: Toả sáng dạng Elip bầu bĩnh (thay vì tròn vo xíu xiu)
+    // Giảm tỷ lệ bóp ở X để hình dáng trông mềm mại, giống viên đạn/sao chổi 
+    vec2 headPos = vec2(0.88, 0.5);
+    vec2 diff = vec2((x - headPos.x) * 4.0, (y - headPos.y) * 2.0);
+    float dist = length(diff);
+    
+    // Core sáng hơn và quầng sáng rộng
+    float headCore = smoothstep(0.4, 0.0, dist) * 1.8;
+    float headGlow = smoothstep(1.2, 0.0, dist);
+    
+    // Rìa mờ tự nhiên ôm sát mép phải để tạo phần mõm thoi (blunt front)
+    float edgeMask = smoothstep(1.0, 0.92, x);
+    
+    float baseAlpha = (tailCore + tailGlow + headCore + headGlow) * edgeMask;
+    
+    // Hiệu ứng nhấp nháy lung linh nhẹ nhàng
+    float shimmer = 0.85 + 0.25 * sin(uOpacity * 60.0);
+    float alpha = baseAlpha * uOpacity * shimmer;
+    
+    vec3 color = mix(vec3(0.5, 0.7, 1.0), vec3(1.0, 1.0, 1.0), x);
     gl_FragColor = vec4(color, alpha);
   }
 `
@@ -71,7 +87,8 @@ function ShootingStar() {
         
         // Varying speeds: 60% chance of being very slow, 40% medium
         const isSlow = Math.random() < 0.6;
-        s.speed = isSlow ? (Math.random() * 3 + 2.5) : (Math.random() * 5 + 6.5)
+        // Tốc độ chậm ban đầu là ~2.5 đến 5.5, giờ tăng gấp 1.5 thành ~3.75 đến 8.25
+        s.speed = isSlow ? ((Math.random() * 3 + 2.5) * 1.5) : (Math.random() * 5 + 6.5)
         
         // Cực kì chậm tan: cho phép sao lướt trọn vẹn màn hình
         s.fadeRate = isSlow ? (Math.random() * 0.08 + 0.05) : (Math.random() * 0.15 + 0.15)

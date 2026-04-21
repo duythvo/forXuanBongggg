@@ -113,7 +113,7 @@ export default function IntroScreen() {
       >
         {isMobile ? (
           <>
-            Ở đâu đó trong vũ trụ này... <br />
+            Ở đâu đó trong vũ trụ này... <br />{" "}
             <span
               style={{
                 color: "#f4c97a",
@@ -125,7 +125,7 @@ export default function IntroScreen() {
           </>
         ) : (
           <>
-            Ở đâu đó trong vũ trụ này...{" "}
+            Ở đâu đó trong vũ trụ này...<br />{" "}
             <span
               style={{
                 color: "#f4c97a",

@@ -13,6 +13,10 @@ export default function ClickableStar({ star }) {
   if (isMobile) {
     position = getMobilePosition(star.id, star.position);
   }
+  
+  // Tỉ lệ gốc: PC là 1.0 (nhỏ, thanh lịch), Mobile là 1.5 (bự dễ bấm)
+  const baseScale = isMobile ? 1.5 : 1.0;
+  
   const meshRef = useRef();
   const glowRef = useRef();
   const [hovered, setHovered] = useState(false);
@@ -48,9 +52,9 @@ export default function ClickableStar({ star }) {
     setHovered(true);
     setCursorState("hover-star");
     gsap.to(meshRef.current.scale, {
-      x: 1.8,
-      y: 1.8,
-      z: 1.8,
+      x: baseScale * 1.2,
+      y: baseScale * 1.2,
+      z: baseScale * 1.2,
       duration: 0.3,
       ease: "back.out(2)",
     });
@@ -64,10 +68,14 @@ export default function ClickableStar({ star }) {
     e.stopPropagation();
     setHovered(false);
     setCursorState("default");
+    
+    // Nếu đã click thì giữ to, nếu chưa thì trả về gốc
+    const targetScale = isClicked ? baseScale * 1.4 : baseScale;
+    
     gsap.to(meshRef.current.scale, {
-      x: isClicked ? 1.8 : 1.5,
-      y: isClicked ? 1.8 : 1.5,
-      z: isClicked ? 1.8 : 1.5,
+      x: targetScale,
+      y: targetScale,
+      z: targetScale,
       duration: 0.4,
       ease: "power2.out",
     });
@@ -89,16 +97,16 @@ export default function ClickableStar({ star }) {
     gsap
       .timeline()
       .to(meshRef.current.scale, {
-        x: 3.5,
-        y: 3.5,
-        z: 3.5,
+        x: baseScale * 2.5,
+        y: baseScale * 2.5,
+        z: baseScale * 2.5,
         duration: 0.1,
         ease: "power2.out",
       })
       .to(meshRef.current.scale, {
-        x: 2.5,
-        y: 2.5,
-        z: 2.5,
+        x: baseScale * 1.4,
+        y: baseScale * 1.4,
+        z: baseScale * 1.4,
         duration: 0.3,
         ease: "elastic.out(1, 0.5)",
       });
@@ -127,7 +135,7 @@ export default function ClickableStar({ star }) {
     <group position={position}>
       {/* Outer glow ring (additive, luminous) */}
       <mesh ref={glowRef}>
-        <sphereGeometry args={[0.4, 16, 16]} />
+        <sphereGeometry args={[isMobile ? 0.45 : 0.28, 16, 16]} />
         <meshBasicMaterial
           color={isHighlighted ? "#f4c97a" : "#9b72cf"}
           transparent
@@ -138,7 +146,7 @@ export default function ClickableStar({ star }) {
       </mesh>
 
       {/* Core star */}
-      <mesh ref={meshRef} scale={isMobile ? [2.8, 2.8, 2.8] : [2, 2, 2]}>
+      <mesh ref={meshRef} scale={[baseScale, baseScale, baseScale]}>
         <sphereGeometry args={[0.09, 16, 16]} />
         <meshStandardMaterial
           color={isHighlighted ? "#ffe8b0" : "#d4b8ff"}
