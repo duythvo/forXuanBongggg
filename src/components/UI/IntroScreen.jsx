@@ -108,9 +108,7 @@ export default function IntroScreen() {
           display: "-webkit-box",
           WebkitLineClamp: isMobile ? "unset" : 2,
           WebkitBoxOrient: "vertical",
-          fontSize: isMobile
-            ? "clamp(0.95rem, 4.5vw, 1.35rem)"
-            : "clamp(2.1rem, 6vw, 2.9rem)",
+          fontSize: "clamp(1.45rem, 3.8vw, 2.1rem)",
         }}
       >
         {isMobile ? (
@@ -165,13 +163,12 @@ export default function IntroScreen() {
           background: "transparent",
           border: "2px solid rgba(244,201,122,0.6)",
           borderRadius: 40,
-          padding: isMobile ? "16px 20px" : "14px 0.5em",
-          minWidth: 220,
+          padding: "14px 32px",
           color: "#f4c97a",
           fontFamily: "'Be Vietnam Pro', sans-serif",
           fontWeight: 400,
-          fontSize: isMobile ? "1rem" : "clamp(1.08rem, 2.8vw, 1.22rem)",
-          letterSpacing: "0.22em",
+          fontSize: "clamp(0.82rem, 2vw, 1.05rem)",
+          letterSpacing: "0.18em",
           textTransform: "uppercase",
           cursor: isMobile ? "pointer" : "none",
           touchAction: "manipulation",

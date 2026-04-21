@@ -38,7 +38,8 @@ function ShootingStar() {
   const state = useRef({
     x: 0, y: 0, z: 0,
     speed: 0, angle: 0, length: 0,
-    opacity: 0, active: false, timer: 0, delay: Math.random() * 8
+    opacity: 0, active: false, timer: 0, delay: Math.random() * 5,
+    fadeRate: 0.5
   })
 
   useFrame((_, delta) => {
@@ -65,10 +66,18 @@ function ShootingStar() {
             s.y = 10 + Math.random() * 5
             s.angle = -Math.PI / 2 - (Math.random() - 0.5) * 0.8
         }
+        // Bring them closer to the camera so they are bigger: Z between -5 and 2
+        s.z = (Math.random() - 0.5) * 7 - 1.5 
         
-        s.z = (Math.random() - 0.5) * 15 - 8
-        s.speed = Math.random() * 15 + 10
-        s.length = Math.random() * 5 + 4
+        // Varying speeds: 40% chance of being very slow, 60% medium/fast
+        const isSlow = Math.random() < 0.4;
+        s.speed = isSlow ? (Math.random() * 4 + 2) : (Math.random() * 15 + 10)
+        
+        // Slow stars fade out very slowly to let them glide, fast stars fade quicker
+        s.fadeRate = isSlow ? (Math.random() * 0.15 + 0.1) : (Math.random() * 0.4 + 0.3)
+        
+        // Base length
+        s.length = Math.random() * 8 + 6
       }
       if (meshRef.current) meshRef.current.visible = false
       return
@@ -77,7 +86,7 @@ function ShootingStar() {
     if (meshRef.current) meshRef.current.visible = true
     s.x += Math.cos(s.angle) * s.speed * delta
     s.y += Math.sin(s.angle) * s.speed * delta
-    s.opacity -= delta * 0.6 // fade out (lives roughly ~1.6s)
+    s.opacity -= delta * s.fadeRate // Varying fade based on speed
 
     if (s.opacity <= 0) {
       s.active = false
@@ -88,9 +97,9 @@ function ShootingStar() {
     if (meshRef.current) {
         meshRef.current.position.set(s.x, s.y, s.z)
         meshRef.current.rotation.z = s.angle
-        // Scale length by speed and opacity
-        const currentLength = s.length * (0.2 + s.opacity * 0.8)
-        meshRef.current.scale.set(currentLength, 0.15, 1)
+        // Scale length by speed and opacity. Make them generally thicker.
+        const currentLength = s.length * (0.3 + s.opacity * 0.7)
+        meshRef.current.scale.set(currentLength, 0.28, 1)
     }
     
     if (materialRef.current) {
