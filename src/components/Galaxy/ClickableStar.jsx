@@ -8,11 +8,10 @@ import { getMobilePosition } from "../../utils/mobileCoords";
 
 export default function ClickableStar({ star }) {
   const isMobile = typeof window !== "undefined" && window.innerWidth <= 768;
-  // Trên mobile: không dịch chuyển tọa độ ngôi sao, để camera/FOV xử lý
-  // Scale nhẹ để ngôi sao vừa màn hình nhỏ
+  // Nhấp đôi kích thước trên cả mobile lẫn PC
   let position = star.position;
   if (isMobile) {
-    position = getMobilePosition(star.position);
+    position = getMobilePosition(star.id, star.position);
   }
   const meshRef = useRef();
   const glowRef = useRef();
@@ -66,9 +65,9 @@ export default function ClickableStar({ star }) {
     setHovered(false);
     setCursorState("default");
     gsap.to(meshRef.current.scale, {
-      x: isClicked ? 1.2 : 1.0,
-      y: isClicked ? 1.2 : 1.0,
-      z: isClicked ? 1.2 : 1.0,
+      x: isClicked ? 1.8 : 1.5,
+      y: isClicked ? 1.8 : 1.5,
+      z: isClicked ? 1.8 : 1.5,
       duration: 0.4,
       ease: "power2.out",
     });
@@ -90,16 +89,16 @@ export default function ClickableStar({ star }) {
     gsap
       .timeline()
       .to(meshRef.current.scale, {
-        x: 2.2,
-        y: 2.2,
-        z: 2.2,
+        x: 3.5,
+        y: 3.5,
+        z: 3.5,
         duration: 0.1,
         ease: "power2.out",
       })
       .to(meshRef.current.scale, {
-        x: 1.5,
-        y: 1.5,
-        z: 1.5,
+        x: 2.5,
+        y: 2.5,
+        z: 2.5,
         duration: 0.3,
         ease: "elastic.out(1, 0.5)",
       });
@@ -128,7 +127,7 @@ export default function ClickableStar({ star }) {
     <group position={position}>
       {/* Outer glow ring (additive, luminous) */}
       <mesh ref={glowRef}>
-        <sphereGeometry args={[0.28, 12, 12]} />
+        <sphereGeometry args={[0.4, 16, 16]} />
         <meshBasicMaterial
           color={isHighlighted ? "#f4c97a" : "#9b72cf"}
           transparent
@@ -139,7 +138,7 @@ export default function ClickableStar({ star }) {
       </mesh>
 
       {/* Core star */}
-      <mesh ref={meshRef} scale={isMobile ? [1.4, 1.4, 1.4] : [1, 1, 1]}>
+      <mesh ref={meshRef} scale={isMobile ? [2.8, 2.8, 2.8] : [2, 2, 2]}>
         <sphereGeometry args={[0.09, 16, 16]} />
         <meshStandardMaterial
           color={isHighlighted ? "#ffe8b0" : "#d4b8ff"}
@@ -150,13 +149,12 @@ export default function ClickableStar({ star }) {
         />
       </mesh>
 
-      {/* Invisible hit area: larger on mobile for touch UX */}
       <mesh
         onPointerOver={handlePointerOver}
         onPointerOut={handlePointerOut}
         onPointerDown={handleClick}
       >
-        <sphereGeometry args={[isMobile ? 0.45 : 0.135, 16, 16]} />
+        <sphereGeometry args={[isMobile ? 0.7 : 0.4, 16, 16]} />
         <meshBasicMaterial transparent opacity={0} depthWrite={false} />
       </mesh>
 

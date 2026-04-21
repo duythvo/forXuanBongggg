@@ -22,7 +22,7 @@ export default function ConstellationLines() {
     // Get star positions from CONFIG
     const starMap = {};
     CONFIG.stars.forEach((star) => {
-      starMap[star.id] = isMobile ? getMobilePosition(star.position) : star.position;
+      starMap[star.id] = isMobile ? getMobilePosition(star.id, star.position) : star.position;
     });
 
     // Draw lines between consecutive clicked stars
