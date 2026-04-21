@@ -69,12 +69,12 @@ function ShootingStar() {
         // Bring them closer to the camera so they are bigger: Z between -5 and 2
         s.z = (Math.random() - 0.5) * 7 - 1.5 
         
-        // Varying speeds: 40% chance of being very slow, 60% medium/fast
-        const isSlow = Math.random() < 0.4;
-        s.speed = isSlow ? (Math.random() * 4 + 2) : (Math.random() * 15 + 10)
+        // Varying speeds: 60% chance of being very slow, 40% medium
+        const isSlow = Math.random() < 0.6;
+        s.speed = isSlow ? (Math.random() * 3 + 2.5) : (Math.random() * 5 + 6.5)
         
-        // Slow stars fade out very slowly to let them glide, fast stars fade quicker
-        s.fadeRate = isSlow ? (Math.random() * 0.15 + 0.1) : (Math.random() * 0.4 + 0.3)
+        // Cực kì chậm tan: cho phép sao lướt trọn vẹn màn hình
+        s.fadeRate = isSlow ? (Math.random() * 0.08 + 0.05) : (Math.random() * 0.15 + 0.15)
         
         // Base length
         s.length = Math.random() * 8 + 6
@@ -97,9 +97,8 @@ function ShootingStar() {
     if (meshRef.current) {
         meshRef.current.position.set(s.x, s.y, s.z)
         meshRef.current.rotation.z = s.angle
-        // Scale length by speed and opacity. Make them generally thicker.
-        const currentLength = s.length * (0.3 + s.opacity * 0.7)
-        meshRef.current.scale.set(currentLength, 0.28, 1)
+        // Giữ nguyên chiều dài trong lúc bay để tránh lỗi scale làm mesh bị giật cục/co rút từ 2 đầu
+        meshRef.current.scale.set(s.length, 0.22, 1)
     }
     
     if (materialRef.current) {
