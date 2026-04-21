@@ -6,7 +6,11 @@ import birthdaySong from "../../assets/soundgallerybydmitrytaras-nostalgic-emoti
 export function initAudio() {
   const audioEl = document.getElementById("bg-audio");
   if (!audioEl) return;
-  // Unlock audio context explicitly by calling play/pause on user interaction
+
+  // Tiêu diệt mọi luồng chạy ngầm của GSAP liên quan đến audioEl để tránh lỗi ghi đè volume = 0
+  gsap.killTweensOf(audioEl);
+  
+  // Mở khóa audio context một cách im lặng tuyệt đối
   audioEl.volume = 0;
   const playPromise = audioEl.play();
   if (playPromise !== undefined) {
@@ -31,6 +35,7 @@ export function playBirthday() {
   const audioEl = document.getElementById("bg-audio");
   if (!audioEl) return;
   
+  gsap.killTweensOf(audioEl);
   audioEl.volume = 0;
   const playPromise = audioEl.play();
   if (playPromise !== undefined) {
@@ -48,6 +53,7 @@ export function stopBirthday() {
   const audioEl = document.getElementById("bg-audio");
   if (!audioEl) return;
   
+  gsap.killTweensOf(audioEl);
   gsap.to(audioEl, {
     volume: 0,
     duration: 0.7,
